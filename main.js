@@ -58,14 +58,20 @@ function execute () {
 
     case 0x01:
       // LOAD
-      console.log('load');
+      console.log('LOAD');
       load_(REG[CRR], REG[MAR]);
       break;
 
     case 0x02:
       // STORE
-      console.log('store');
+      console.log('STORE');
       store(REG[CRR], REG[MAR]);
+      break;
+
+    case 0x03:
+      // BRANCH
+      console.log('BRANCH');
+      REG[PC] = REG[MAR] - 1;
       break;
   }
 }
@@ -86,7 +92,7 @@ function cpu () {
     REG[CRR] = REG[MDR] & 0x0F;
 
 
-    if (REG[CIR] == 0x01 || REG[CIR] == 0x02) {
+    if (REG[CIR] == 0x01 || REG[CIR] == 0x02 || REG[CIR] == 0x03) {
       // Means a RAM address is in the next memory location
       load_(MAR, ++REG[PC]);
     }
@@ -102,10 +108,12 @@ function cpu () {
 var RAM = setup_ram();
 var REG = setup_reg();
 
-RAM[0x00] = 0x11;
-RAM[0x01] = 0x00;
-RAM[0x02] = 0x21;
-RAM[0x03] = 0x04;
+RAM[0x00] = 0x30; // Branch
+RAM[0x01] = 0x05; //    to 0x05
+RAM[0x05] = 0x11; // Load in R0
+RAM[0x06] = 0x00; //    from 0x00
+RAM[0x07] = 0x21; // Store R0
+RAM[0x08] = 0x04; //    in 0x04
 
 cpu();
 
