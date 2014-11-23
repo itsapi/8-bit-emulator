@@ -4,7 +4,7 @@
 Instructions
 ------------
 
-    0x00  NOP
+    0x00  NOP         = 8
 
     0x10  LOAD [reg]  = 4 4
           [addr]      = 8
