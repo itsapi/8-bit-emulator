@@ -1,11 +1,12 @@
 var BITS = 8;
 var N_REG = 0x20;
 
-var PC  = 0x0F;
-var CIR = 0x10;
-var CRR = 0x11;
-var MDR = 0x12;
-var MAR = 0x13;
+var PC  = 0x0F; // Program Counter
+var CIR = 0x10; // Current Instruction Register
+var MDR = 0x12; // Memory Data Register
+var CRR = 0x11; // Current Register Register
+var IVR = 0x14; // Intermediate Value Register
+var MAR = 0x13; // Memory Address Register
 
 
 function setup_ram () {
@@ -73,6 +74,21 @@ function execute () {
       console.log('BRANCH');
       REG[PC] = REG[MAR] - 1;
       break;
+
+    case 0x04:
+      // SET
+      console.log('SET');
+      console.log(REG[REG[CRR]], REG[IVR])
+      REG[REG[CRR]] = REG[IVR];
+      break;
+
+    case 0x05:
+      // ADD
+      console.log('ADD');
+      console.log(REG[REG[CRR]], REG[IVR])
+      REG[REG[CRR]] += REG[IVR];
+      break;
+
   }
 }
 
@@ -83,7 +99,7 @@ function cpu () {
 
     // Fetch:
 
-    // Put instruction in CIR
+    // Put instruction in MDR
     load_(MDR, REG[PC]);
 
     // Get the opcode
@@ -91,10 +107,13 @@ function cpu () {
     // Get the operand
     REG[CRR] = REG[MDR] & 0x0F;
 
-
     if (REG[CIR] == 0x01 || REG[CIR] == 0x02 || REG[CIR] == 0x03) {
       // Means a RAM address is in the next memory location
       load_(MAR, ++REG[PC]);
+    }
+    if (REG[CIR] == 0x04 || REG[CIR] == 0x05) {
+      // Means a number literal is in the next memory location
+      load_(IVR, ++REG[PC]);
     }
 
     // Execute:
@@ -108,12 +127,10 @@ function cpu () {
 var RAM = setup_ram();
 var REG = setup_reg();
 
-RAM[0x00] = 0x30; // Branch
-RAM[0x01] = 0x05; //    to 0x05
-RAM[0x05] = 0x11; // Load in R0
-RAM[0x06] = 0x00; //    from 0x00
-RAM[0x07] = 0x21; // Store R0
-RAM[0x08] = 0x04; //    in 0x04
+RAM[0x00] = 0x41;
+RAM[0x01] = 0x05;
+RAM[0x02] = 0x51;
+RAM[0x03] = 0x15;
 
 cpu();
 
