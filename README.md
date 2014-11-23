@@ -11,3 +11,6 @@ Instructions
 
     0x20  STORE [reg] = 4 4
           [addr]      = 8
+
+    0x30  BRANCH      = 8
+          [addr]      = 8
