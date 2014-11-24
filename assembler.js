@@ -53,11 +53,7 @@ prog.forEach(function (line) {
     throw 'ParseError: {} takes {} arguments'.format(parts[0], args);
   }
 
-  if (parts[0] == 'BRANCH') {
-    // Add label to instructions - it will be replaced next pass
-    instructions[hex(pointer)] = parts[1];
-
-  } else if (parts.length > 1) {
+  if (parts.length > 1) {
     // Merge opcode and operand
     instructions[hex(pointer)] = hex(opcode | parts[1].slice(1));
 
@@ -67,6 +63,11 @@ prog.forEach(function (line) {
     }
   } else {
     instructions[hex(pointer)] = hex(opcode);
+  }
+
+  if (parts[0] == 'BRANCH') {
+    // Add label to instructions - it will be replaced next pass
+    instructions[hex(++pointer)] = parts[1];
   }
 
   pointer++;
@@ -84,5 +85,6 @@ Object.keys(instructions).forEach(function (key) {
 if (output) {
   fs.writeFileSync(output, JSON.stringify(instructions));
 } else {
+  console.log(labels)
   console.log(instructions);
 }
