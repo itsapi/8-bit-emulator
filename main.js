@@ -106,6 +106,7 @@ function execute () {
 function cpu () {
   REG[PC] = 0x0;
   while (REG[PC] >= 0 && REG[PC] < Math.pow(2, BITS)) {
+  console.log(REG);
 
     // Fetch:
 
@@ -143,9 +144,13 @@ RAM[0x02] = 0x51;
 RAM[0x03] = 0x15;
 
 if (input) {
-  var prog = JSON.parse(fs.readFileSync(input));
-  for (key in prog) {
-    RAM[parseInt(key)] = parseInt(prog[key]);
+  var stream = fs.createReadStream(input);
+
+  var fd = fs.openSync(input, 'r');
+  var buf = new Buffer(1);
+
+  for (var i=0; fs.readSync(fd, buf, 0, 1) == 1; i++) {
+    RAM[i] = buf[0];
   }
 }
 
