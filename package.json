@@ -4,6 +4,7 @@
   "description": "8-Bit Emulator",
   "main": "main.js",
   "dependencies": {
+    "minimist": "^1.1.0",
     "string-format": "^0.2.1"
   },
   "repository": {

@@ -1,8 +1,15 @@
 var fs = require('fs');
+var argv = require('minimist')(process.argv.slice(2));
 require('string-format');
 
-var filename = process.argv[2];
-var data = fs.readFileSync(filename);
+if (argv.h || argv.help || !argv._[0]) {
+  console.log('Usage: {} input [-o|--out output] [-h|--help]'.format(__filename));
+  process.exit();
+}
+
+var input = argv._[0];
+var output = argv.o || argv.out;
+var data = fs.readFileSync(input);
 var prog = data.toString().split('\n');
 
 var map = {
@@ -36,14 +43,14 @@ prog.forEach(function (line) {
 
   var parts = line.split(/ +/);
   if (!(parts[0] in map)) {
-    throw ('ParseError: unknown instruction ' + parts[0]);
+    throw 'ParseError: unknown instruction ' + parts[0];
   }
 
   var opcode = map[parts[0]].opcode;
   var args = map[parts[0]].args;
 
   if (parts.length - 1 != args) {
-    throw ('ParseError: {} takes {} arguments'.format(parts[0], args));
+    throw 'ParseError: {} takes {} arguments'.format(parts[0], args);
   }
 
   if (parts[0] == 'BRANCH') {
@@ -74,6 +81,8 @@ Object.keys(instructions).forEach(function (key) {
   }
 });
 
-console.log(prog)
-console.log(instructions);
-console.log(labels);
+if (output) {
+  fs.writeFileSync(output, JSON.stringify(instructions));
+} else {
+  console.log(instructions);
+}
