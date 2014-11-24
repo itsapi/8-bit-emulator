@@ -23,14 +23,18 @@ var instructions = {};
 var labels = {};
 prog.forEach(function (line) {
 
+  // Remove comments and trailing spaces, ignore blank lines
+  line = line.replace(/;.*/, '').trim();
+  if (!line) return;
+
   if (line.slice(-1) == ':') {
-    // Line is a label
+    // Store address of label
     var label = line.slice(0, -1);
     labels[label] = hex(pointer);
     return
   }
 
-  var parts = line.split(' ');
+  var parts = line.split(/ +/);
   if (!(parts[0] in map)) {
     throw ('ParseError: unknown instruction ' + parts[0]);
   }
@@ -62,6 +66,7 @@ prog.forEach(function (line) {
 
 });
 
+// Replace labels with addresses
 Object.keys(instructions).forEach(function (key) {
   var token = instructions[key];
   if (token in labels) {
