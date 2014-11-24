@@ -1,3 +1,6 @@
+var fs = require('fs');
+var input = process.argv[2];
+
 var BITS = 8;
 var N_REG = 0x20;
 
@@ -131,6 +134,13 @@ RAM[0x00] = 0x41;
 RAM[0x01] = 0x05;
 RAM[0x02] = 0x51;
 RAM[0x03] = 0x15;
+
+if (input) {
+  var prog = JSON.parse(fs.readFileSync(input));
+  for (key in prog) {
+    RAM[parseInt(key)] = parseInt(prog[key]);
+  }
+}
 
 cpu();
 
