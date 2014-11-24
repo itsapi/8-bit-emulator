@@ -1,5 +1,6 @@
 var fs = require('fs');
 var input = process.argv[2];
+var debug = false;
 
 var BITS = 8;
 var N_REG = 0x20;
@@ -10,6 +11,12 @@ var MDR = 0x12; // Memory Data Register
 var CRR = 0x11; // Current Register Register
 var IVR = 0x14; // Intermediate Value Register
 var MAR = 0x13; // Memory Address Register
+
+
+function log (s) {
+  if (debug)
+    console.log(s);
+}
 
 
 function setup_ram () {
@@ -62,33 +69,33 @@ function execute () {
 
     case 0x01:
       // LOAD
-      console.log('LOAD');
+      log('LOAD');
       load_(REG[CRR], REG[MAR]);
       break;
 
     case 0x02:
       // STORE
-      console.log('STORE');
+      log('STORE');
       store(REG[CRR], REG[MAR]);
       break;
 
     case 0x03:
       // BRANCH
-      console.log('BRANCH');
+      log('BRANCH');
       REG[PC] = REG[MAR] - 1;
       break;
 
     case 0x04:
       // SET
-      console.log('SET');
-      console.log(REG[REG[CRR]], REG[IVR])
+      log('SET');
+      log(REG[REG[CRR]], REG[IVR])
       REG[REG[CRR]] = REG[IVR];
       break;
 
     case 0x05:
       // ADD
-      console.log('ADD');
-      console.log(REG[REG[CRR]], REG[IVR])
+      log('ADD');
+      log(REG[REG[CRR]], REG[IVR])
       REG[REG[CRR]] += REG[IVR];
       break;
 

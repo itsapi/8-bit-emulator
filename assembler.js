@@ -21,12 +21,8 @@ var map = {
   'ADD':    { opcode: 0x50, args: 2}
 };
 
-function hex(str) {
-  return '0x' + str.toString(16);
-}
-
 var pointer = 0;
-var instructions = {};
+var instructions = [];
 var labels = {};
 prog.forEach(function (line) {
 
@@ -37,7 +33,7 @@ prog.forEach(function (line) {
   if (line.slice(-1) == ':') {
     // Store address of label
     var label = line.slice(0, -1);
-    labels[label] = hex(pointer);
+    labels[label] = pointer;
     return
   }
 
@@ -55,19 +51,19 @@ prog.forEach(function (line) {
 
   if (parts.length > 1) {
     // Merge opcode and operand
-    instructions[hex(pointer)] = hex(opcode | parts[1].slice(1));
+    instructions[pointer] = opcode | parts[1].slice(1);
 
     if (parts.length > 2) {
       // Put address in next memory location
-      instructions[hex(++pointer)] = hex(parseInt(parts[2]));
+      instructions[++pointer] = parseInt(parts[2]);
     }
   } else {
-    instructions[hex(pointer)] = hex(opcode);
+    instructions[pointer] = opcode;
   }
 
   if (parts[0] == 'BRANCH') {
     // Add label to instructions - it will be replaced next pass
-    instructions[hex(++pointer)] = parts[1];
+    instructions[++pointer] = parts[1];
   }
 
   pointer++;
@@ -83,7 +79,9 @@ Object.keys(instructions).forEach(function (key) {
 });
 
 if (output) {
-  fs.writeFileSync(output, JSON.stringify(instructions));
+  var stream = fs.createWriteStream(output);
+  stream.write(new Buffer(instructions));
+  stream.end();
 } else {
   console.log(labels)
   console.log(instructions);
