@@ -18,7 +18,10 @@ var map = {
   'STORE':  { opcode: 0x20, args: 2},
   'BRANCH': { opcode: 0x30, args: 1},
   'SET':    { opcode: 0x40, args: 2},
-  'ADD':    { opcode: 0x50, args: 2}
+  'ADD':    { opcode: 0x50, args: 2},
+  'SUB':    { opcode: 0x60, args: 2},
+  'BNZ':    { opcode: 0x70, args: 2},
+  'EXIT':   { opcode: 0x80, args: 0}
 };
 
 var pointer = 0;

@@ -1,6 +1,6 @@
 var fs = require('fs');
 var input = process.argv[2];
-var debug = false;
+var debug = true;
 
 var BITS = 8;
 var N_REG = 0x20;
@@ -88,15 +88,34 @@ function execute () {
     case 0x04:
       // SET
       log('SET');
-      log(REG[REG[CRR]], REG[IVR])
       REG[REG[CRR]] = REG[IVR];
       break;
 
     case 0x05:
       // ADD
       log('ADD');
-      log(REG[REG[CRR]], REG[IVR])
       REG[REG[CRR]] += REG[IVR];
+      break;
+
+    case 0x06:
+      // SUB
+      log('SUB');
+      console.log(REG[REG[CRR]], ' - ', REG[IVR])
+      REG[REG[CRR]] -= REG[IVR];
+      break;
+
+    case 0x07:
+      // BNZ
+      log('BNZ');
+      if (REG[REG[CRR]] != 0) {
+        REG[PC] = REG[MAR];
+      }
+      break;
+
+    case 0x08:
+      // EXIT
+      log('EXIT');
+      return 1;
       break;
 
   }
@@ -106,7 +125,7 @@ function execute () {
 function cpu () {
   REG[PC] = 0x0;
   while (REG[PC] >= 0 && REG[PC] < Math.pow(2, BITS)) {
-  console.log(REG);
+    console.log(REG);
 
     // Fetch:
 
@@ -118,17 +137,19 @@ function cpu () {
     // Get the operand
     REG[CRR] = REG[MDR] & 0x0F;
 
-    if (REG[CIR] == 0x01 || REG[CIR] == 0x02 || REG[CIR] == 0x03) {
+    if (REG[CIR] == 0x1 || REG[CIR] == 0x2 || REG[CIR] == 0x3 || REG[CIR] == 0x7) {
       // Means a RAM address is in the next memory location
       load_(MAR, ++REG[PC]);
     }
-    if (REG[CIR] == 0x04 || REG[CIR] == 0x05) {
+    if (REG[CIR] == 0x4 || REG[CIR] == 0x5 || REG[CIR] == 0x6) {
       // Means a number literal is in the next memory location
       load_(IVR, ++REG[PC]);
     }
 
     // Execute:
-    execute();
+    if (execute() === 1) {
+      return;
+    }
 
     REG[PC]++;
   }

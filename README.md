@@ -20,3 +20,11 @@ Instructions
 
     0x50  ADD [reg]   = 4 4
           [num]       = 8
+
+    0x60  SUB [reg]   = 4 4
+          [num]       = 8
+
+    0x70  BNZ [reg]   = 4 4   Branch if reg is not 0
+          [addr]      = 8
+
+    0x80  EXIT        = 8
