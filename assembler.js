@@ -6,12 +6,12 @@ var data = fs.readFileSync(filename);
 var prog = data.toString().split('\n');
 
 var map = {
-  'NOP':    { opcode: 0x00, args: 0, format: '' },
-  'LOAD':   { opcode: 0x10, args: 2, format: 'reg addr' },
-  'STORE':  { opcode: 0x20, args: 2, format: 'reg addr' },
-  'BRANCH': { opcode: 0x30, args: 1, format: 'label' },
-  'SET':    { opcode: 0x40, args: 2, format: 'reg num' },
-  'ADD':    { opcode: 0x50, args: 2, format: 'reg num' }
+  'NOP':    { opcode: 0x00, args: 0},
+  'LOAD':   { opcode: 0x10, args: 2},
+  'STORE':  { opcode: 0x20, args: 2},
+  'BRANCH': { opcode: 0x30, args: 1},
+  'SET':    { opcode: 0x40, args: 2},
+  'ADD':    { opcode: 0x50, args: 2}
 };
 
 function hex(str) {
