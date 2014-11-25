@@ -14,8 +14,9 @@ var MAR = 0x13; // Memory Address Register
 
 
 function log (s) {
-  if (debug)
+  if (debug) {
     console.log(s);
+  }
 }
 
 
@@ -114,7 +115,7 @@ function execute () {
     case 0x08:
       // EXIT
       log('EXIT');
-      return 1;
+      return true;
       break;
 
   }
@@ -135,17 +136,17 @@ function cpu () {
     // Get the operand
     REG[CRR] = REG[MDR] & 0x0F;
 
-    if (REG[CIR] == 0x1 || REG[CIR] == 0x2 || REG[CIR] == 0x3 || REG[CIR] == 0x7) {
+    if ([0x1, 0x2, 0x3, 0x7].indexOf(REG[CIR]) > -1) {
       // Means a RAM address is in the next memory location
       load_(MAR, ++REG[PC]);
     }
-    if (REG[CIR] == 0x4 || REG[CIR] == 0x5 || REG[CIR] == 0x6) {
+    if ([0x4, 0x5, 0x6].indexOf(REG[CIR]) > -1) {
       // Means a number literal is in the next memory location
       load_(IVR, ++REG[PC]);
     }
 
     // Execute:
-    if (execute() === 1) {
+    if (execute()) {
       return;
     }
 
