@@ -58,7 +58,7 @@ prog.forEach(function (line) {
 
     if (parts.length > 2) {
       // Put address in next memory location
-      instructions[++pointer] = parseInt(parts[2]);
+      instructions[++pointer] = parts[0] == 'BNZ' ? parts[2] : parseInt(parts[2]);
     }
   } else {
     instructions[pointer] = opcode;

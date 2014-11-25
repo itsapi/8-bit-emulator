@@ -100,7 +100,6 @@ function execute () {
     case 0x06:
       // SUB
       log('SUB');
-      console.log(REG[REG[CRR]], ' - ', REG[IVR])
       REG[REG[CRR]] -= REG[IVR];
       break;
 
@@ -108,7 +107,7 @@ function execute () {
       // BNZ
       log('BNZ');
       if (REG[REG[CRR]] != 0) {
-        REG[PC] = REG[MAR];
+        REG[PC] = REG[MAR] - 1;
       }
       break;
 
@@ -125,7 +124,6 @@ function execute () {
 function cpu () {
   REG[PC] = 0x0;
   while (REG[PC] >= 0 && REG[PC] < Math.pow(2, BITS)) {
-    console.log(REG);
 
     // Fetch:
 
