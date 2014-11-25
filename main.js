@@ -5,12 +5,17 @@ var debug = true;
 var BITS = 8;
 var N_REG = 0x20;
 
+// Named Registers
 var PC  = 0x0F; // Program Counter
 var CIR = 0x10; // Current Instruction Register
 var MDR = 0x12; // Memory Data Register
 var CRR = 0x11; // Current Register Register
 var IVR = 0x14; // Intermediate Value Register
 var MAR = 0x13; // Memory Address Register
+var SR  = 0x15; // Status Register
+
+// Status Codes
+var EXIT = 0x01;
 
 
 function log (s) {
@@ -66,6 +71,7 @@ function execute () {
   switch (REG[CIR]) {
     case 0x00:
       // NOP
+      console.log('NOP')
       break;
 
     case 0x01:
@@ -115,7 +121,7 @@ function execute () {
     case 0x08:
       // EXIT
       log('EXIT');
-      return true;
+      REG[SR] |= EXIT;
       break;
 
   }
@@ -146,7 +152,8 @@ function cpu () {
     }
 
     // Execute:
-    if (execute()) {
+    execute()
+    if (REG[SR] & EXIT) {
       return;
     }
 
