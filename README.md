@@ -4,8 +4,10 @@
 Instructions
 ------------
 
-Hex Opcode | Assembly               | Memory Layout
----------- | ---------------------- | -------------
+Registers are written as Rx in the assembly, where x is a register in hex from 0-15. In the machine code a register is 4 bits and a number or address is 1 byte.
+
+Hex Opcode | Assembly               | Memory Layout (hex)
+---------- | ---------------------- | -------------------
 `0x00`     | `NOP`                  | `00`
 `0x10`     | `LOAD   [reg] [label]` | `1x xx`
 `0x20`     | `STORE  [reg] [label]` | `2x xx`
