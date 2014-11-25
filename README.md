@@ -17,3 +17,11 @@ Hex Opcode | Assembly               | Memory Layout (hex)
 `0x60`     | `SUB    [reg] [num]`   | `6x xx`
 `0x70`     | `BNZ    [reg] [label]` | `7x xx`
 `0x80`     | `EXIT`                 | `80`
+
+
+Assembly Directives
+-------------------
+
+Directive    | Assembles to (hex)
+-------------| ------------------
+`DEF [byte]` | `xx`

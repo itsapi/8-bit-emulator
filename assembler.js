@@ -21,7 +21,8 @@ var map = {
   'ADD':    { opcode: 0x50, args: 2},
   'SUB':    { opcode: 0x60, args: 2},
   'BNZ':    { opcode: 0x70, args: 2},
-  'EXIT':   { opcode: 0x80, args: 0}
+  'EXIT':   { opcode: 0x80, args: 0},
+  'DEF':    { opcode: 0x00, args: 1}
 };
 
 var pointer = 0;
@@ -62,6 +63,11 @@ prog.forEach(function (line) {
     }
   } else {
     instructions[pointer] = opcode;
+  }
+
+  if (parts[0] == 'DEF') {
+    // Add label to instructions - it will be replaced next pass
+    instructions[pointer] = parts[1];
   }
 
   if (parts[0] == 'BRANCH') {
