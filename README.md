@@ -4,27 +4,24 @@
 Instructions
 ------------
 
-    0x00  NOP         = 8
+Registers are written as Rx in the assembly, where x is a register in hex from 0-15. In the machine code a register is 4 bits and a number or address is 1 byte.
 
-    0x10  LOAD [reg]  = 4 4
-          [addr]      = 8
+Hex Opcode | Assembly               | Memory Layout (hex)
+---------- | ---------------------- | -------------------
+`0x00`     | `NOP`                  | `00`
+`0x10`     | `LOAD   [reg] [label]` | `1x xx`
+`0x20`     | `STORE  [reg] [label]` | `2x xx`
+`0x30`     | `BRANCH [label]`       | `30 xx`
+`0x40`     | `SET    [reg] [num]`   | `4x xx`
+`0x50`     | `ADD    [reg] [num]`   | `5x xx`
+`0x60`     | `SUB    [reg] [num]`   | `6x xx`
+`0x70`     | `BNZ    [reg] [label]` | `7x xx`
+`0x80`     | `EXIT`                 | `80`
 
-    0x20  STORE [reg] = 4 4
-          [addr]      = 8
 
-    0x30  BRANCH      = 8
-          [addr]      = 8
+Assembly Directives
+-------------------
 
-    0x40  SET [reg]   = 4 4
-          [num]       = 8
-
-    0x50  ADD [reg]   = 4 4
-          [num]       = 8
-
-    0x60  SUB [reg]   = 4 4
-          [num]       = 8
-
-    0x70  BNZ [reg]   = 4 4   Branch if reg is not 0
-          [addr]      = 8
-
-    0x80  EXIT        = 8
+Directive    | Assembles to (hex)
+-------------| ------------------
+`DEF [byte]` | `xx`
