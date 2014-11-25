@@ -66,7 +66,7 @@ prog.forEach(function (line) {
   }
 
   if (parts[0] == 'DEF') {
-    // Add label to instructions - it will be replaced next pass
+    // Set this location to the value specified
     instructions[pointer] = parts[1];
   }
 
