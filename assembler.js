@@ -85,6 +85,8 @@ if (output) {
   var stream = fs.createWriteStream(output);
   stream.write(new Buffer(instructions));
   stream.end();
+} else if (!process.stdout.isTTY) {
+  process.stdout.write(new Buffer(instructions));
 } else {
   console.log(labels)
   console.log(instructions);

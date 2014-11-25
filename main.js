@@ -163,18 +163,41 @@ RAM[0x01] = 0x05;
 RAM[0x02] = 0x51;
 RAM[0x03] = 0x15;
 
-if (input) {
-  var stream = fs.createReadStream(input);
-
-  var fd = fs.openSync(input, 'r');
-  var buf = new Buffer(1);
-
-  for (var i=0; fs.readSync(fd, buf, 0, 1) == 1; i++) {
-    RAM[i] = buf[0];
-  }
+var data = '';
+if (!process.stdin.isTTY) {
+  process.stdin.on('readable', function() {
+    var chunk = process.stdin.read();
+    if (chunk !== null) {
+      data += chunk;
+    }
+  });
+  process.stdin.on('end', function() {
+    run();
+  });
+} else {
+  run();
 }
 
-cpu();
+function run() {
+  if (input) {
+    var stream = fs.createReadStream(input);
 
-console.log(REG);
-console.log(RAM.slice(0, 20));
+    var fd = fs.openSync(input, 'r');
+    var buf = new Buffer(1);
+
+    for (var i=0; fs.readSync(fd, buf, 0, 1) == 1; i++) {
+      RAM[i] = buf[0];
+    }
+  } else if (data) {
+    var buf = new Buffer(data);
+    console.log(data)
+    for (i in buf) {
+      RAM[i] = buf[i];
+    }
+  }
+
+  // cpu();
+
+  // console.log(REG);
+  console.log(RAM.slice(0, 20));
+}
