@@ -4,7 +4,7 @@
 Instructions
 ------------
 
-Registers are written as Rx in the assembly, where x is a register in hex from 0-15. In the machine code a register is 4 bits and a number or address is 1 byte.
+Registers are written as Rx in the assembly, where x is a register from 0-15. In the machine code a register is 4 bits and a number or address is 1 byte.
 
 Hex Opcode | Assembly               | Memory Layout (hex) | Description
 ---------- | ---------------------- | ------------------- | -----------
