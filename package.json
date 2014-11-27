@@ -1,6 +1,6 @@
 {
   "name": "8-bit-emulator",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "8-Bit Emulator",
   "main": "main.js",
   "dependencies": {
