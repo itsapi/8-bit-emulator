@@ -80,12 +80,14 @@ prog.forEach(function (line) {
 });
 
 // Replace labels with addresses
-Object.keys(instructions).forEach(function (key) {
-  var token = instructions[key];
-  if (token in labels) {
-    instructions[key] = labels[token];
-  }
-});
+if (Object.keys(labels).length) {
+  Object.keys(instructions).forEach(function (key) {
+    var token = instructions[key];
+    if (token in labels) {
+      instructions[key] = labels[token];
+    }
+  });
+}
 
 if (output) {
   var stream = fs.createWriteStream(output);
